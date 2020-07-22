@@ -1,6 +1,6 @@
 package br.com.b2w.challenge.starwars.service;
 
-import br.com.b2w.challenge.starwars.model.db.IdSequence;
+import br.com.b2w.challenge.starwars.controller.advice.ResourceNotFoundException;
 import br.com.b2w.challenge.starwars.model.db.Planet;
 import br.com.b2w.challenge.starwars.repository.PlanetRepository;
 import br.com.b2w.challenge.starwars.service.interfaces.IdSequenceServiceInterface;
@@ -24,6 +24,8 @@ public class PlanetServiceImpl implements PlanetServiceInterface {
         if(planetRepository.findByName(planet.getName()).isPresent()) {
             throw new RuntimeException("Planet already registered in the database.");
         }
+        // depois de verificar se existe no banco de dados, verificar se existe na api
+        // fazer isso consultando o numero de filmes que o planeta apareceu
 
         planet.setId(idSequenceService.getIdAndUpdate(Planet.SEQUENCE_NAME));
         return planetRepository.insert(planet);
@@ -46,7 +48,7 @@ public class PlanetServiceImpl implements PlanetServiceInterface {
 
     @Override
     public Planet getById(long id) {
-        return planetRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found planet with id " + id));
+        return planetRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found planet with id " + id));
     }
 
     @Override
