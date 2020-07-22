@@ -1,5 +1,7 @@
 package br.com.b2w.challenge.starwars.model.dto;
 
+import org.springframework.data.annotation.Transient;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -9,6 +11,7 @@ public class PlanetDTO implements Serializable {
     private String name;
     private String climate;
     private String terrain;
+    private int numFilms;
 
     public long getId() {
         return id;
@@ -42,6 +45,14 @@ public class PlanetDTO implements Serializable {
         this.terrain = terrain;
     }
 
+    public int getNumFilms() {
+        return numFilms;
+    }
+
+    public void setNumFilms(int numFilms) {
+        this.numFilms = numFilms;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,6 +76,7 @@ public class PlanetDTO implements Serializable {
                 ", name='" + name + '\'' +
                 ", climate='" + climate + '\'' +
                 ", terrain='" + terrain + '\'' +
+                ", numFilms='" + numFilms + '\'' +
                 '}';
     }
 }

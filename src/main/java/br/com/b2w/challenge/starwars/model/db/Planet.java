@@ -1,12 +1,15 @@
 package br.com.b2w.challenge.starwars.model.db;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
 
 @Document(collection = "planets")
 public class Planet {
+    @Transient
+    public static final String SEQUENCE_NAME = "planets_id_sequence";
 
     @Id
     private long id;
