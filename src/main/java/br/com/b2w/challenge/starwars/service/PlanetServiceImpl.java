@@ -32,8 +32,10 @@ public class PlanetServiceImpl implements PlanetServiceInterface {
     }
 
     @Override
-    public void remove(long planetId) {
+    public boolean remove(long planetId) {
         planetRepository.deleteById(planetId);
+
+        return !planetRepository.existsById(planetId);
     }
 
     @Override
@@ -42,7 +44,7 @@ public class PlanetServiceImpl implements PlanetServiceInterface {
     }
 
     @Override
-    public List<Planet> getByName(String planetName) {
+    public List<Planet> getByNameContaining(String planetName) {
         return planetRepository.findByNameContaining(planetName);
     }
 

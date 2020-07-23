@@ -1,7 +1,5 @@
 package br.com.b2w.challenge.starwars.model.dto;
 
-import org.springframework.data.annotation.Transient;
-
 import java.io.Serializable;
 import java.util.Objects;
 

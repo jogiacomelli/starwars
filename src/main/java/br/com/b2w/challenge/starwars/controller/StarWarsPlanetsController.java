@@ -21,6 +21,7 @@ public class StarWarsPlanetsController {
 
     @GetMapping
     public ResponseEntity<List<PlanetDTO>> getAll() {
+
         return ResponseEntity.ok().body(mapper.mapAllToDTO(planetService.getAll()));
     }
 
@@ -31,4 +32,27 @@ public class StarWarsPlanetsController {
         return  ResponseEntity.ok().body(responsePlanet);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PlanetDTO> getById(@PathVariable long id) {
+
+        return ResponseEntity.ok().body(mapper.map(planetService.getById(id)));
+    }
+
+    @GetMapping("/{name}")
+    public ResponseEntity<List<PlanetDTO>> getByName(@PathVariable String name) {
+
+        return ResponseEntity.ok().body(mapper.mapAllToDTO(planetService.getByNameContaining(name)));
+    }
+
+    @PutMapping
+    public ResponseEntity<PlanetDTO> updatePlanet(@RequestBody PlanetDTO planet) {
+
+        return ResponseEntity.ok().body(mapper.map(planetService.update(mapper.map(planet))));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Boolean> deletePlanet(@PathVariable long id) {
+
+        return ResponseEntity.ok().body(planetService.remove(id));
+    }
 }
