@@ -32,14 +32,14 @@ public class StarWarsPlanetsController {
         return  ResponseEntity.ok().body(responsePlanet);
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<PlanetDTO> getById(@PathVariable long id) {
 
         return ResponseEntity.ok().body(mapper.map(planetService.getById(id)));
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<List<PlanetDTO>> getByName(@PathVariable String name) {
+    @GetMapping("/search")
+    public ResponseEntity<List<PlanetDTO>> getByName(@RequestParam(required = true) String name) {
 
         return ResponseEntity.ok().body(mapper.mapAllToDTO(planetService.getByNameContaining(name)));
     }
