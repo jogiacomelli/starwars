@@ -3,6 +3,7 @@ package br.com.b2w.challenge.starwars.service;
 import br.com.b2w.challenge.starwars.controller.advice.ResourceNotFoundException;
 import br.com.b2w.challenge.starwars.model.db.Planet;
 import br.com.b2w.challenge.starwars.repository.PlanetRepository;
+import br.com.b2w.challenge.starwars.restclient.StarWarsAPIClient;
 import br.com.b2w.challenge.starwars.service.interfaces.IdSequenceServiceInterface;
 import br.com.b2w.challenge.starwars.service.interfaces.PlanetServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +20,18 @@ public class PlanetServiceImpl implements PlanetServiceInterface {
     @Autowired
     private PlanetRepository planetRepository;
 
+    @Autowired
+    private StarWarsAPIClient client;
+
     @Override
     public Planet add(Planet planet) {
         if(planetRepository.findByName(planet.getName()).isPresent()) {
             throw new RuntimeException("Planet already registered in the database.");
         }
-        // depois de verificar se existe no banco de dados, verificar se existe na api
-        // fazer isso consultando o numero de filmes que o planeta apareceu
 
+        int totalMovies = client.getTotalFilmsByPlanet(planet.getName());
+
+        planet.setNumFilms(totalMovies);
         planet.setId(idSequenceService.getIdAndUpdate(Planet.SEQUENCE_NAME));
         return planetRepository.insert(planet);
     }
@@ -39,7 +44,13 @@ public class PlanetServiceImpl implements PlanetServiceInterface {
     }
 
     @Override
-    public Planet update(Planet planet) {
+    public Planet update(Planet planet, boolean updateNumMovies) {
+
+        if(updateNumMovies) {
+            int totalMovies = client.getTotalFilmsByPlanet(planet.getName());
+            planet.setNumFilms(totalMovies);
+        }
+
         return planetRepository.save(planet);
     }
 

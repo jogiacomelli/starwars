@@ -45,9 +45,9 @@ public class StarWarsPlanetsController {
     }
 
     @PutMapping
-    public ResponseEntity<PlanetDTO> updatePlanet(@RequestBody PlanetDTO planet) {
+    public ResponseEntity<PlanetDTO> updatePlanet(@RequestBody PlanetDTO planet, @RequestParam(required = false) boolean updateNumMovies) {
 
-        return ResponseEntity.ok().body(mapper.map(planetService.update(mapper.map(planet))));
+        return ResponseEntity.ok().body(mapper.map(planetService.update(mapper.map(planet), updateNumMovies)));
     }
 
     @DeleteMapping("{id}")
