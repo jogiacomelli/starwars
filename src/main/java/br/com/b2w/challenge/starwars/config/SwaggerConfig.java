@@ -18,7 +18,7 @@ public class SwaggerConfig {
     public Docket apis() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("br.com.codenation"))
+                .apis(RequestHandlerSelectors.basePackage("br.com.b2w.challenge.starwars"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo())
