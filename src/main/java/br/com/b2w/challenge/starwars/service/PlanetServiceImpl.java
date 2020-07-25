@@ -44,13 +44,7 @@ public class PlanetServiceImpl implements PlanetServiceInterface {
     }
 
     @Override
-    public Planet update(Planet planet, boolean updateNumMovies) {
-
-        if(updateNumMovies) {
-            int totalMovies = client.getTotalFilmsByPlanet(planet.getName());
-            planet.setNumFilms(totalMovies);
-        }
-
+    public Planet update(Planet planet) {
         return planetRepository.save(planet);
     }
 
