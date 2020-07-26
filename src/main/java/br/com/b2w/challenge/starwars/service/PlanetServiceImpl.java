@@ -1,5 +1,6 @@
 package br.com.b2w.challenge.starwars.service;
 
+import br.com.b2w.challenge.starwars.controller.advice.ResourceAlreadyRegisteredException;
 import br.com.b2w.challenge.starwars.controller.advice.ResourceNotFoundException;
 import br.com.b2w.challenge.starwars.model.db.Planet;
 import br.com.b2w.challenge.starwars.repository.PlanetRepository;
@@ -8,6 +9,7 @@ import br.com.b2w.challenge.starwars.service.interfaces.IdSequenceServiceInterfa
 import br.com.b2w.challenge.starwars.service.interfaces.PlanetServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 
@@ -26,12 +28,9 @@ public class PlanetServiceImpl implements PlanetServiceInterface {
     @Override
     public Planet add(Planet planet) {
         if(planetRepository.findByName(planet.getName()).isPresent()) {
-            throw new RuntimeException("Planet already registered in the database.");
+            throw new ResourceAlreadyRegisteredException("Already registered in the database the planet is. Yes, hrrrm.");
         }
 
-        int totalMovies = client.getTotalFilmsByPlanet(planet.getName());
-
-        planet.setNumFilms(totalMovies);
         planet.setId(idSequenceService.getIdAndUpdate(Planet.SEQUENCE_NAME));
         return planetRepository.insert(planet);
     }

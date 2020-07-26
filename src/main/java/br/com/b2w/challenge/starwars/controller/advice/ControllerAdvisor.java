@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
@@ -27,8 +28,15 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return ex.getMessage();
     }
 
+    @ExceptionHandler(ResourceAlreadyRegisteredException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public String handleResourceAlreadyRegisteredException(ResourceAlreadyRegisteredException ex) {
+        return ex.getMessage();
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return super.handleMethodArgumentNotValid(ex, headers, status, request);
+        return new ResponseEntity<Object>(ex.getMessage(), headers, HttpStatus.BAD_REQUEST);
     }
 }

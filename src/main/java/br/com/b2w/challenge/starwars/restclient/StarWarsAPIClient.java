@@ -38,7 +38,7 @@ public class StarWarsAPIClient {
             if(resultArray.size() == 1) {
                 numFilmes = resultArray.get(0).getAsJsonObject().get("films").getAsJsonArray().size();
             } else {
-                throw new ResourceNotFoundException("The planet " + planetName + " was not found in the star wars universe.");
+                throw new ResourceNotFoundException("Found in the star wars universe the planet " + planetName + " was not. Yrsssss.");
             }
         }
 

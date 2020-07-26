@@ -2,11 +2,17 @@ package br.com.b2w.challenge.starwars.controller;
 
 import br.com.b2w.challenge.starwars.model.dto.PlanetDTO;
 import br.com.b2w.challenge.starwars.model.mapper.PlanetMapper;
+import br.com.b2w.challenge.starwars.restclient.StarWarsAPIClient;
 import br.com.b2w.challenge.starwars.service.interfaces.PlanetServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.util.UriComponents;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -15,6 +21,9 @@ public class StarWarsPlanetsController {
 
     @Autowired
     private PlanetServiceInterface planetService;
+
+    @Autowired
+    private StarWarsAPIClient swApiClient;
 
     @Autowired
     private PlanetMapper mapper;
@@ -26,10 +35,17 @@ public class StarWarsPlanetsController {
     }
 
     @PostMapping
-    public ResponseEntity<PlanetDTO> add(@RequestBody PlanetDTO planet) {
+    public ResponseEntity<PlanetDTO> add(@Valid @RequestBody PlanetDTO planet) {
+        int numFilms = swApiClient.getTotalFilmsByPlanet(planet.getName());
+        planet.setNumFilms(numFilms);
+
         PlanetDTO responsePlanet = mapper.map(planetService.add(mapper.map(planet)));
 
-        return  ResponseEntity.ok().body(responsePlanet);
+        UriComponents uriComponents = MvcUriComponentsBuilder.fromMethodName(
+                StarWarsPlanetsController.class, "getById", responsePlanet.getId())
+                .buildAndExpand(1);
+        URI nextUri = uriComponents.toUri();
+        return ResponseEntity.created(nextUri).body(responsePlanet);
     }
 
     @GetMapping("/{id}")
@@ -45,14 +61,17 @@ public class StarWarsPlanetsController {
     }
 
     @PutMapping
-    public ResponseEntity<PlanetDTO> updatePlanet(@RequestBody PlanetDTO planet) {
+    public ResponseEntity<PlanetDTO> updatePlanet(@Valid @RequestBody PlanetDTO planet) {
+        int numFilms = swApiClient.getTotalFilmsByPlanet(planet.getName());
+        planet.setNumFilms(numFilms);
 
         return ResponseEntity.ok().body(mapper.map(planetService.update(mapper.map(planet))));
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Boolean> deletePlanet(@PathVariable long id) {
+    public ResponseEntity.HeadersBuilder<?> deletePlanet(@PathVariable long id) {
 
-        return ResponseEntity.ok().body(planetService.remove(id));
+        planetService.remove(id);
+        return ResponseEntity.status(HttpStatus.OK);
     }
 }

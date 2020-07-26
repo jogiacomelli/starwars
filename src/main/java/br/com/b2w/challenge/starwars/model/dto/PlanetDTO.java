@@ -1,14 +1,23 @@
 package br.com.b2w.challenge.starwars.model.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class PlanetDTO implements Serializable {
 
     private long id;
+
+    @NotBlank(message = "Be informed the name of the planet must. Yes, hrrrm.")
     private String name;
+
+    @NotBlank(message = "Be informed the climate of the planet must. Yes, hrrrm.")
     private String climate;
+
+    @NotBlank(message = "Be informed the terrain of the planet must. Yes, hrrrm.")
     private String terrain;
+
     private int numFilms;
 
     public long getId() {
