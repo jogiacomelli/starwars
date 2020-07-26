@@ -44,7 +44,12 @@ public class PlanetServiceImpl implements PlanetServiceInterface {
 
     @Override
     public Planet update(Planet planet) {
-        return planetRepository.save(planet);
+        Planet toUpgrade = getById(planet.getId());
+        toUpgrade.setClimate(planet.getClimate());
+        toUpgrade.setTerrain(planet.getTerrain());
+        toUpgrade.setNumFilms(planet.getNumFilms());
+
+        return planetRepository.save(toUpgrade);
     }
 
     @Override
@@ -54,7 +59,7 @@ public class PlanetServiceImpl implements PlanetServiceInterface {
 
     @Override
     public Planet getById(long id) {
-        return planetRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found planet with id " + id));
+        return planetRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Found the planet was not. Id " + id));
     }
 
     @Override
